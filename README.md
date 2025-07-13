@@ -13,7 +13,7 @@
 
 1. **下载代码**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/dandan0x1/chrome_cf_local.git
    cd cloudflare-bypass-extension
    ```
 
