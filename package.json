@@ -1,0 +1,54 @@
+{
+  "name": "cf本地打码",
+  "version": "1.0.0",
+  "description": "用于分析 Cloudflare 验证绕过功能",
+  "main": "background.js",
+  "scripts": {
+    "build": "echo 'Extension built successfully'",
+    "test": "echo 'Testing extension functionality'",
+    "lint": "echo 'Linting JavaScript files'",
+    "package": "echo 'Creating extension package' && zip -r cf-bypass-extension.zip . -x '*.git*' 'node_modules/*' '*.md' 'package*.json'",
+    "clean": "echo 'Cleaning temporary files'",
+    "dev": "echo 'Development mode - load extension in Chrome'"
+  },
+  "keywords": [
+    "chrome-extension",
+    "cloudflare",
+    "captcha",
+    "bypass",
+    "research",
+    "academic",
+    "security",
+    "automation"
+  ],
+  "author": "DanDan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/research/cf-bypass-extension"
+  },
+  "bugs": {
+    "url": "https://github.com/research/cf-bypass-extension/issues"
+  },
+  "homepage": "https://github.com/research/cf-bypass-extension#readme",
+  "devDependencies": {},
+  "dependencies": {},
+  "browser": {
+    "chrome": ">=90.0.0"
+  },
+  "manifest": {
+    "version": 3,
+    "permissions": [
+      "activeTab",
+      "storage",
+      "webRequest",
+      "webRequestBlocking"
+    ]
+  },
+  "research": {
+    "purpose": "用于分析 Cloudflare 验证绕过能力的网络安全学术研究",
+    "scope": "Cloudflare 验证绕过分析",
+    "compliance": "仅供教育使用",
+    "ethics": "仅供网络安全学术研究"
+  }
+}

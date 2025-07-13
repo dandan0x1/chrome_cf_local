@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 350px;
+      min-height: 400px;
+      margin: 0;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .warning {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #856404;
+    }
+    .config-section {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .config-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #444;
+    }
+    .input-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: #666;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .switch {
+      position: relative;
+      width: 50px;
+      height: 24px;
+      margin-right: 10px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 24px;
+      transition: .4s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: .4s;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .status {
+      text-align: center;
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+    .status.inactive {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .status.active {
+      background: #d4edda;
+      color: #155724;
+    }
+    .status.working {
+      background: #fff3cd;
+      color: #856404;
+    }
+    .btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+    .stats {
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h3>CF 绕过研究工具</h3>
+  </div>
+
+  <div class="warning">
+    ⚠️ 此工具仅用于学术研究。请负责任地使用，并遵守适用的法律和服务条款。
+  </div>
+
+  <div id="status" class="status inactive">
+    状态: 未激活
+  </div>
+
+  <div class="config-section">
+    <div class="config-title">手动网站密钥输入</div>
+    
+    <div class="input-group">
+      <label for="websiteKey">当前网站密钥:</label>
+      <input type="text" id="websiteKey" placeholder="输入 websiteKey (例如: 0x4AAA...)">
+    </div>
+    
+    <div class="toggle-switch">
+      <input type="checkbox" id="saveKey" checked>
+      <label for="saveKey">保存此域名的密钥</label>
+    </div>
+    
+    <button class="btn btn-primary" id="useWebsiteKey">🚀 使用此网站密钥</button>
+    <button class="btn btn-secondary" id="manageKeys">📋 管理已保存密钥</button>
+    <button class="btn btn-secondary" id="manualSubmit">📤 手动提交</button>
+    
+    <div style="font-size: 11px; color: #666; margin-top: 8px; text-align: center;">
+      当前域名: <span id="currentDomain">-</span>
+    </div>
+  </div>
+
+  <div class="config-section">
+    <div class="config-title">JavaScript 拦截</div>
+    
+    <div class="toggle-switch">
+      <label class="switch">
+        <input type="checkbox" id="enableJSInterception" checked>
+        <span class="slider"></span>
+      </label>
+      <span>启用 JS 钩子 (自动检测)</span>
+    </div>
+    
+    <div class="toggle-switch">
+      <input type="checkbox" id="safeMode" checked>
+      <label for="safeMode">安全模式 (减少对验证码显示的影响)</label>
+    </div>
+    
+    <div style="font-size: 11px; color: #666; margin: 8px 0;">
+      • JS钩子可以自动检测验证码，但可能影响网站正常功能<br>
+      • 安全模式使用更保守的策略，减少对验证码显示的干扰<br>
+      • 如遇验证码无法显示，请关闭JS钩子或开启安全模式
+    </div>
+    
+    <button class="btn btn-secondary" id="toggleHooks">⏸️ 切换 JS 钩子</button>
+  </div>
+
+  <div class="config-section">
+    <div class="config-title">快速操作</div>
+    
+    <button class="btn btn-secondary" id="forceDetect">🔍 强制检测验证码</button>
+    <button class="btn btn-secondary" id="debugPage">🔧 调试当前页面</button>
+    <button class="btn btn-secondary" id="refreshHooks">🔄 刷新 JS 钩子</button>
+  </div>
+
+  <div class="config-section">
+    <div class="config-title">主要设置</div>
+    
+    <div class="toggle-switch">
+      <label class="switch">
+        <input type="checkbox" id="enableBypass">
+        <span class="slider"></span>
+      </label>
+      <span>启用自动绕过</span>
+    </div>
+
+    <div class="input-group">
+      <label for="apiEndpoint">API 端点:</label>
+      <input type="text" id="apiEndpoint" value="http://localhost:3000" placeholder="API 服务器 URL">
+    </div>
+
+    <div class="input-group">
+      <label for="authToken">认证令牌 (可选):</label>
+      <input type="password" id="authToken" placeholder="认证令牌">
+    </div>
+  </div>
+
+  <div class="config-section">
+    <div class="config-title">绕过选项</div>
+    
+    <div class="input-group">
+      <label for="bypassType">绕过方法:</label>
+      <select id="bypassType">
+        <option value="cftoken">CF Turnstile 令牌</option>
+        <option value="cfcookie">CF Clearance Cookie</option>
+        <option value="hcaptcha">hCaptcha</option>
+        <option value="recaptchav2">reCAPTCHA v2</option>
+        <option value="recaptchav3">reCAPTCHA v3</option>
+      </select>
+    </div>
+
+    <div class="toggle-switch">
+      <input type="checkbox" id="autoDetect" checked>
+      <label for="autoDetect">自动检测验证码类型</label>
+    </div>
+
+    <div class="toggle-switch">
+      <input type="checkbox" id="retryFailed">
+      <label for="retryFailed">重试失败的尝试</label>
+    </div>
+  </div>
+
+  <div class="config-section">
+    <div class="config-title">代理设置</div>
+    
+    <div class="toggle-switch">
+      <label class="switch">
+        <input type="checkbox" id="useProxy">
+        <span class="slider"></span>
+      </label>
+      <span>使用代理</span>
+    </div>
+
+    <div class="input-group">
+      <label for="proxyHost">代理主机:</label>
+      <input type="text" id="proxyHost" placeholder="127.0.0.1">
+    </div>
+
+    <div class="input-group">
+      <label for="proxyPort">代理端口:</label>
+      <input type="number" id="proxyPort" placeholder="8080">
+    </div>
+  </div>
+
+  <button class="btn btn-primary" id="saveConfig">保存配置</button>
+  <button class="btn btn-secondary" id="testConnection">测试 API 连接</button>
+
+  <div class="stats" id="stats">
+    已绕过: 0 | 失败: 0 | 成功率: 0%
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
